@@ -1,0 +1,88 @@
+------------------Check if user already exists-----------------------------
+PURGE RECYCLEBIN;
+
+SET SERVEROUTPUT ON;
+declare
+    is_true number;
+begin
+    select count(*) 
+    INTO IS_TRUE
+    from all_users where username='DONATOR';
+    IF IS_TRUE > 0
+    THEN
+    EXECUTE IMMEDIATE 'DROP USER DONATOR CASCADE';
+    END IF;
+END;
+/
+
+declare
+    is_true number;
+begin
+    select count(*) 
+    INTO IS_TRUE
+    from all_users where username='VOLUNTEER';
+    IF IS_TRUE > 0
+    THEN
+    EXECUTE IMMEDIATE 'DROP USER VOLUNTEER CASCADE';
+    END IF;
+END;
+/
+
+SET SERVEROUTPUT ON;
+declare
+    is_true number;
+begin
+    select count(*) 
+    INTO IS_TRUE
+    from all_users where username='FOOD_PANTRY_MANAGER';
+    IF IS_TRUE > 0
+    THEN
+    EXECUTE IMMEDIATE 'DROP USER FOOD_PANTRY_MANAGER CASCADE';
+    END IF;
+END;
+/
+
+SET SERVEROUTPUT ON;
+declare
+    is_true number;
+begin
+    select count(*) 
+    INTO IS_TRUE
+    from all_users where username='RECIPIENT';
+    IF IS_TRUE > 0
+    THEN
+    EXECUTE IMMEDIATE 'DROP USER RECIPIENT CASCADE';
+    END IF;
+END;
+/
+
+--------------------Creating Project specific users----------------------------
+CREATE USER DONATOR IDENTIFIED BY Password123456789 QUOTA 200M ON DATA;
+CREATE USER VOLUNTEER IDENTIFIED BY Password123456789 QUOTA 200M ON DATA;
+CREATE USER FOOD_PANTRY_MANAGER IDENTIFIED BY Password123456789 QUOTA 200M ON DATA;
+CREATE USER RECIPIENT IDENTIFIED BY Password123456789 QUOTA 200M ON DATA;
+
+---------------------Granting privileges to FOOD_PANTRY_MANAGER--------------------------------
+GRANT CONNECT TO FOOD_PANTRY_MANAGER;
+GRANT CREATE PROCEDURE TO FOOD_PANTRY_MANAGER;
+GRANT CREATE VIEW TO FOOD_PANTRY_MANAGER;
+GRANT EXECUTE ON INSERT_DATA_PROCEDURES_FOOD_PANTRY_MANAGER TO FOOD_PANTRY_MANAGER;
+GRANT EXECUTE ON VERIFY_INCOME TO FOOD_PANTRY_MANAGER;
+
+---------------------Granting privileges to DONATOR--------------------------------
+GRANT CONNECT TO DONATOR;
+GRANT CREATE PROCEDURE TO DONATOR;
+GRANT CREATE VIEW TO DONATOR;
+GRANT EXECUTE ON INSERT_DATA_DONATOR TO DONATOR;
+
+---------------------Granting privileges to VOLUNTEER--------------------------------
+GRANT CONNECT TO VOLUNTEER;
+GRANT CREATE PROCEDURE TO VOLUNTEER;
+GRANT CREATE VIEW TO VOLUNTEER;
+GRANT EXECUTE ON INSERT_DATA_VOLUNTEER TO VOLUNTEER;
+
+---------------------Granting privileges to RECIPIENT--------------------------------
+GRANT CONNECT TO RECIPIENT;
+GRANT CREATE PROCEDURE TO RECIPIENT;
+GRANT CREATE VIEW TO RECIPIENT;
+GRANT EXECUTE ON INSERT_DATA_RECIPIENT TO RECIPIENT;
