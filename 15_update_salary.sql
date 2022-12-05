@@ -1,0 +1,1 @@
+update recipient set r_income = 100 where R_USERNAME = 'WalkerA1';
